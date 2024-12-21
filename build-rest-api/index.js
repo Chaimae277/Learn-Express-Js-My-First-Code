@@ -56,7 +56,39 @@ app.delete('/:studentId', (req, res) => {
       })
     }
   }
+});
+
+// Crate Student
+app.post('/create', (req, res) => {
+  let {newStudent} = req.body;
+  newStudent = {
+    id: students.length + 1,
+    ...newStudent
+  }
+  students.push(newStudent);
+  res.status(200).json({
+    students
+  });
+});
+
+
+// Update Student By ID
+app.put('/update/:studentId', (req, res) => {
+  let {studentId} = req.params;
+  if(studentId) {
+    let foundStudent = students.find((item) => item.id === Number(studentId));
+    const index = students.indexOf(foundStudent);
+    students[index] = {
+      ...foundStudent,
+      note : foundStudent.note + 1
+    }
+    res.json({
+      updatedStudents : students,
+      newUpdatedItem : students[index]
+    })
+  }
 })
+
 
 app.listen(port, () => {
   console.log('Connection with success');
